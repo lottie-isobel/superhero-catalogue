@@ -1,36 +1,29 @@
-import React, { useEffect, useState } from "react";
-import "../../src/index.css";
+import {useEffect, useState} from "react";
+import {HeroCard} from "../components/index.js";
 
 export default function AllHeroes() {
-  const [characters, setCharacters] = useState([]);
+    const [characters, setCharacters] = useState([]);
 
-  useEffect(() => {
-    async function displayCharacters() {
-      const response = await fetch(
-        "https://akabab.github.io/superhero-api/api/all.json"
-      );
-      const data = await response.json();
-      setCharacters(data);
-    }
-    displayCharacters();
-  }, []);
+    useEffect(() => {
+        async function displayCharacters() {
+            return await fetch("https://akabab.github.io/superhero-api/api/all.json");
+        }
 
-  return (
-    <div>
-      <h1>All Superheroes</h1>
-      <form className="search-form">
-        <input type="text" placeholder="enter a hero"></input>
-        <button type="submit">Search</button>
-      </form>
-      <div className="grid-container">
-        {characters.map((hero, index) => (
-          <div key={index} className="grid-item">
-            <img src={hero.images.md} alt={hero.name} />
-            <br />
-            {hero.name}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+        displayCharacters()
+            .then(response => response.json())
+            .then(setCharacters);
+    }, []);
+
+    return (
+        <div>
+            <h1>All Superheroes</h1>
+            <form className="search-form">
+                <input type="text" placeholder="enter a hero"></input>
+                <button type="submit">Search</button>
+            </form>
+            <div className="grid-container">
+                {characters.map((hero, index) => <HeroCard hero={hero} key={index} />)}
+            </div>
+        </div>
+    );
 }
